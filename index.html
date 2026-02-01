@@ -3,35 +3,28 @@
 <head>
   <meta charset="UTF-8" />
   <title>Valentine Question 💖</title>
-
   <style>
     body {
       height: 100vh;
       margin: 0;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
       font-family: Arial, Helvetica, sans-serif;
       background: linear-gradient(135deg, #ff9a9e, #fad0c4);
       overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
     }
 
     h1 {
+      color: white;
       font-size: 2.4rem;
-      color: #fff;
       margin-bottom: 40px;
       text-align: center;
     }
 
-    .buttons {
-      position: relative;
-      width: 320px;
-      height: 140px;
-    }
-
     button {
-      padding: 14px 28px;
+      padding: 15px 32px;
       font-size: 18px;
       border: none;
       border-radius: 30px;
@@ -42,46 +35,50 @@
     #yesBtn {
       background-color: #28a745;
       color: white;
-      left: 40px;
-      top: 50px;
+      left: 45%;
+      top: 60%;
     }
 
     #noBtn {
       background-color: #dc3545;
       color: white;
-      left: 180px;
-      top: 50px;
-      transition: left 0.4s ease, top 0.4s ease; /* slow & smooth */
+      left: 55%;
+      top: 60%;
+      transition: left 0.6s ease, top 0.6s ease; /* VERY slow */
+      pointer-events: none; /* cannot be clicked */
     }
   </style>
 </head>
-
 <body>
 
   <h1>Neha ji, will you be my Valentine ?? 💕</h1>
 
-  <div class="buttons">
-    <button id="yesBtn" onclick="yesClicked()">Yes</button>
-    <button id="noBtn">No</button>
-  </div>
+  <button id="yesBtn" onclick="yesClicked()">Yes</button>
+  <button id="noBtn">No</button>
 
   <script>
     const noBtn = document.getElementById("noBtn");
-    const container = document.querySelector(".buttons");
 
-    container.addEventListener("mousemove", () => {
-      const maxX = container.clientWidth - noBtn.offsetWidth;
-      const maxY = container.clientHeight - noBtn.offsetHeight;
+    document.addEventListener("mousemove", (e) => {
+      const btnRect = noBtn.getBoundingClientRect();
+      const offset = 30; // distance ahead of cursor (small & gentle)
 
-      const randomX = Math.random() * maxX;
-      const randomY = Math.random() * maxY;
+      let newX = e.clientX + offset;
+      let newY = e.clientY + offset;
 
-      noBtn.style.left = randomX + "px";
-      noBtn.style.top = randomY + "px";
+      const maxX = window.innerWidth - btnRect.width - 10;
+      const maxY = window.innerHeight - btnRect.height - 10;
+
+      // Keep inside screen
+      newX = Math.min(Math.max(10, newX), maxX);
+      newY = Math.min(Math.max(10, newY), maxY);
+
+      noBtn.style.left = newX + "px";
+      noBtn.style.top = newY + "px";
     });
 
     function yesClicked() {
-      alert("Yayyy! 💖 I knew it babu 😍");
+      alert("Yayyy! 💖 You just made my Valentine perfect Babu 😍");
     }
   </script>
 
