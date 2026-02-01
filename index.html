@@ -55,32 +55,45 @@
   <script>
     const noBtn = document.getElementById("noBtn");
 
-    let targetX = window.innerWidth * 0.55;
-    let targetY = window.innerHeight * 0.55;
+    let x = window.innerWidth * 0.55;
+    let y = window.innerHeight * 0.55;
 
-    let currentX = targetX;
-    let currentY = targetY;
-
-    const speed = 0.04; // VERY slow movement (lower = slower)
+    const repelRadius = 120;   // distance to start repelling
+    const repelStrength = 0.08; // VERY slow movement
 
     document.addEventListener("mousemove", (e) => {
-      const offset = 30; // just ahead of cursor
-
       const rect = noBtn.getBoundingClientRect();
 
-      targetX = e.clientX + offset;
-      targetY = e.clientY + offset;
+      const btnCenterX = rect.left + rect.width / 2;
+      const btnCenterY = rect.top + rect.height / 2;
 
-      const maxX = window.innerWidth - rect.width - 10;
-      const maxY = window.innerHeight - rect.height - 10;
+      const dx = btnCenterX - e.clientX;
+      const dy = btnCenterY - e.clientY;
 
-      targetX = Math.min(Math.max(10, targetX), maxX);
-      targetY = Math.min(Math.max(10, targetY), maxY);
+      const distance = Math.sqrt(dx * dx + dy * dy);
+
+      // Only move when cursor is close
+      if (distance < repelRadius) {
+        const force = (repelRadius - distance) / repelRadius;
+
+        x += dx * force * repelStrength;
+        y += dy * force * repelStrength;
+
+        const maxX = window.innerWidth - rect.width - 10;
+        const maxY = window.innerHeight - rect.height - 10;
+
+        x = Math.min(Math.max(10, x), maxX);
+        y = Math.min(Math.max(10, y), maxY);
+
+        noBtn.style.left = x + "px";
+        noBtn.style.top = y + "px";
+      }
     });
 
-    function animate() {
-      currentX += (targetX - currentX) * speed;
-      currentY += (targetY - currentY) * speed;
+    function yesClicked() {
+      alert("Yayyy! 💖 That was the only correct answer 😍");
+    }
+  </script>
 
-      noBtn.style.left = currentX + "px";
-      noBtn.style.top = currentY + "px";
+</body>
+</html>
