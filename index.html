@@ -11,36 +11,36 @@
       background: linear-gradient(135deg, #ff9a9e, #fad0c4);
       font-family: Arial, Helvetica, sans-serif;
       overflow: hidden;
+      touch-action: none; /* important for mobile */
     }
 
     h1 {
       color: white;
       text-align: center;
-      margin-top: 80px;
-      font-size: 2.4rem;
+      margin: 70px 16px 0;
+      font-size: 2.2rem;
     }
 
     button {
-      padding: 15px 32px;
+      padding: 16px 36px;
       font-size: 18px;
       border: none;
       border-radius: 30px;
       position: absolute;
-      cursor: pointer;
     }
 
     #yesBtn {
       background-color: #28a745;
       color: white;
-      left: 42%;
-      top: 55%;
+      left: 25%;
+      top: 60%;
     }
 
     #noBtn {
       background-color: #dc3545;
       color: white;
       left: 55%;
-      top: 55%;
+      top: 60%;
     }
   </style>
 </head>
@@ -56,23 +56,22 @@
     const noBtn = document.getElementById("noBtn");
 
     let x = window.innerWidth * 0.55;
-    let y = window.innerHeight * 0.55;
+    let y = window.innerHeight * 0.6;
 
-    const repelRadius = 120;   // distance to start repelling
-    const repelStrength = 0.8; // VERY slow movement
+    const repelRadius = 100;     // distance to react
+    const repelStrength = 0.12;  // slow & gentle
 
-    document.addEventListener("mousemove", (e) => {
+    function repel(pointerX, pointerY) {
       const rect = noBtn.getBoundingClientRect();
 
-      const btnCenterX = rect.left + rect.width / 2;
-      const btnCenterY = rect.top + rect.height / 2;
+      const btnX = rect.left + rect.width / 2;
+      const btnY = rect.top + rect.height / 2;
 
-      const dx = btnCenterX - e.clientX;
-      const dy = btnCenterY - e.clientY;
+      const dx = btnX - pointerX;
+      const dy = btnY - pointerY;
 
       const distance = Math.sqrt(dx * dx + dy * dy);
 
-      // Only move when cursor is close
       if (distance < repelRadius) {
         const force = (repelRadius - distance) / repelRadius;
 
@@ -88,10 +87,23 @@
         noBtn.style.left = x + "px";
         noBtn.style.top = y + "px";
       }
+    }
+
+    // Desktop mouse support
+    document.addEventListener("mousemove", (e) => {
+      repel(e.clientX, e.clientY);
     });
 
+    // Mobile touch support
+    document.addEventListener("touchmove", (e) => {
+      if (e.touches.length > 0) {
+        const touch = e.touches[0];
+        repel(touch.clientX, touch.clientY);
+      }
+    }, { passive: false });
+
     function yesClicked() {
-      alert("Yayyy! 💖 That was the only correct answer 😍");
+      alert("Yayyy! 💖 Valentine accepted 😍");
     }
   </script>
 
